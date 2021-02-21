@@ -18,7 +18,6 @@ artifacts:
     - middleware/**/*
     - models/**/*
     - routes/**/*
-    - .env
     - package-lock.json
     - package.json
     - node_modules/**/*

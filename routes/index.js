@@ -5,6 +5,7 @@ const modelRoutes = require("./model.route");
 const cartRoutes = require("./cart.route");
 const paymentRoutes = require("./payment.route");
 const adminRoutes = require("./admin.route");
+const activateRoutes = require("./activate.route")
 
 const router = express.Router();
 
@@ -17,4 +18,6 @@ router.use("/cart", cartRoutes);
 router.use("/payment", paymentRoutes);
 
 router.use("/admin", adminRoutes);
+
+router.use("/activate", activateRoutes);
 module.exports = router;

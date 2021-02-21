@@ -5,7 +5,9 @@ const config = require("../config/config");
 const userController = require("../controller/user.controller");
 const authController = require("../controller/auth.controller");
 const cartController = require("../controller/cart.controller.js");
+const activationController = require("../controller/activation.controller");
 const passport = require("../middleware/passport");
+
 
 const router = express.Router();
 
@@ -33,6 +35,7 @@ async function insert(req, res, next) {
         foundUser = await userController.getUserByEmail(req.user.email);
         req.user = foundUser;
         cartController.createCart(foundUser._id);
+        activationController.createActivation(req.user);
         next();
       } else {
         res.status(500).json({ message: "User does not exist!" });

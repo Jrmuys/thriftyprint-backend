@@ -18,6 +18,10 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  active: {
+    type: Boolean,
+    default: false,
+  },
   roles: [
     {
       type: String,
