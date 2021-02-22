@@ -15,11 +15,18 @@ const localLogin = new LocalStrategy(
       email,
       password
     );
-    return user
-      ? done(null, user)
-      : done(null, false, {
-        error: "Your login details are not valid. Please try again",
-      });
+    if (user.active) {
+      return user
+        ? done(null, user)
+        : done(null, false, {
+          error: "Your login details are not valid. Please try again",
+        });
+    }
+    else {
+      return done(null, false, {
+        error: "Your account is not yet activated, please check your email"
+      })
+    }
   }
 );
 
@@ -30,11 +37,14 @@ const jwtLogin = new JwtStrategy(
   },
   async (payload, done) => {
     const user = await userController.getUserById(payload._id);
+
     return user
       ? done(null, user)
       : done(null, false, {
         error: "Your login details are not valid. Please try again",
       });
+
+
   }
 );
 

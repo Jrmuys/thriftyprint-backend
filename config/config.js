@@ -19,4 +19,5 @@ module.exports = {
   awsRegion: envVars.AWS_REGION,
   awsAccessKeySecret: envVars.AWS_ACCESS_SECRET,
   awsAccessKeyID: envVars.AWS_ACCESS_ID,
+  debugMode: envVars.DEBUG,
 };

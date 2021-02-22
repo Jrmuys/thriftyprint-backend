@@ -112,22 +112,40 @@ router.put(
     let filePath = req.body.filePath;
     const user = req.body.user;
     const model = new Model();
+    console.log("FILE: ", req.file)
     Model.updateOne(
       { _id: req.params.id },
       {
         user: req.body.user,
         title: req.body.title,
-        filePath: req.file.location,
         units: req.body.units,
         comment: req.body.comment,
         quantity: req.body.quantity,
       }
     )
       .then((updatedModel) => {
-        console.log("model updated in db", req.file);
-        console.log("Updated model: ", updatedModel);
-        res.status(200).json(updatedModel);
-      })
+        if (req.file) {
+          Model.updateOne(
+            { _id: req.params.id }, {
+            filePath: req.file.location
+          }
+          ).then((updatedModelFile) => {
+            console.log("model updated in db", req.file);
+            console.log("Updated model: ", updatedModelFile)
+            res.status(200).json(updatedModelFile);
+
+          }).catch((err) => {
+            res.status(500).json({
+              message: "An error in updating the model file occurred",
+              error: err
+            })
+          })
+        } else {
+          console.log("Updated model: ", updatedModel)
+          res.status(200).json(updatedModel);
+        }
+      }
+      )
       .catch((err) => {
         res.status(500).json({
           message: "An error in updating the model occurred",
