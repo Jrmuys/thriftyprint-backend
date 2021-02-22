@@ -11,11 +11,13 @@ const localLogin = new LocalStrategy(
     usernameField: "email",
   },
   async (email, password, done) => {
+    if (config.debugMode) { console.log("New local login..."); }
     const user = await userController.getUserByEmailIdAndPassword(
       email,
       password
     );
     if (user.active) {
+      console.log("user is acive")
       return user
         ? done(null, user)
         : done(null, false, {
