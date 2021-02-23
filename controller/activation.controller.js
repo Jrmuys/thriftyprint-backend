@@ -24,11 +24,18 @@ function randomString() {
 }
 
 async function activateAccount(rndString) {
+    console.log("Activating account...")
     let activateFound = await Activate.findOne({ randomString: rndString }).catch((err) => {
+        console.log("error found:", err)
         throw err;
     })
     if (activateFound) {
-        Activate.deleteOne({ randomString: rndString })
+        Activate.deleteOne({ randomString: rndString }).then((result) => {
+            console.log("Deleted successfully:", result)
+        }).catch((err) => {
+            console.log("Error with deleting activation:", err)
+            throw err;
+        })
         console.log(activateFound)
         let user = await User.updateOne({ _id: activateFound.userID }, { active: true }).catch((err) => {
             throw err;
@@ -38,6 +45,7 @@ async function activateAccount(rndString) {
         }
         return 1;
     } else {
+        console.log("Activation not found")
         throw new Error("Activation string not found")
     }
 }

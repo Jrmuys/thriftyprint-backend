@@ -7,6 +7,7 @@ const authController = require("../controller/auth.controller");
 const cartController = require("../controller/cart.controller.js");
 const activationController = require("../controller/activation.controller");
 const passport = require("../middleware/passport");
+const activate = require("../controller/activation.controller")
 
 
 const router = express.Router();
@@ -23,6 +24,24 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   login
 );
+
+router.get(
+  "/activate/:str",
+  async (req, res, next) => {
+    console.log("Activating...")
+    try {
+      await activate.activateAccount(req.params.str)
+      res.status(200).json({
+        text: "Successfully activated!"
+      })
+    } catch (err) {
+      res.status(500).json({
+        text: "Internal server error",
+        error: err
+      })
+    }
+  }
+)
 
 async function insert(req, res, next) {
   const savedUser = req.body;
@@ -49,6 +68,8 @@ async function insert(req, res, next) {
 function test(req, res, next) {
   next();
 }
+
+
 
 function login(req, res) {
   const expiresIn = config.expiresIn;
