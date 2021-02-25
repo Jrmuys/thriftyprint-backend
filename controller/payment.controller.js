@@ -98,36 +98,163 @@ async function handleRequest(req, res) {
     orderListItemHTML = "";
     orderArray.forEach((cartItem) => {
       orderListItemHTML += `<tr style="height: 53px;">
-    <td style="width: 148px; text-align: center; height: 53px;">${cartItem.model.title}</td>
+    <td style="width: 148px; padding:4px; text-align: center; height: 53px;">${cartItem.model.title}</td>
     <td style="width: 100px; height: 53px;">&nbsp;<img><img src="${cartItem.imgUrl}" alt="thumbnail" width="192" height="108" /></td>
     <td style="width: 259px; text-align: center; height: 53px;">${cartItem.model.quantity}</td>
     <td style="width: 135px; text-align: center; height: 53px;">${cartItem.price}</td>
     </tr>`;
     });
     console.log(orderListItemHTML);
-    htmlToSend = `<h1 style="text-align: center;"><strong>New Order Recieved</strong></h1>
-    <p style="text-align: center;">order was placed at ${order.date}</p>
-    <p style="text-align: center;">order number: ${order.orderId}</p>
-    <p style="text-align: center;">username: ${order.customerName}</p>
-    <p style="text-align: center;">email: ${order.customerEmail}</p>
-    <h3 style="text-align: left;">Order Details:</h3>
-    <table style="height: 72px; width: 670px;">
-    <tbody>
-    <tr style="height: 32px;">
-    <td style="width: 148px; text-align: center; height: 32px;">Model Title</td>
-    <td style="width: 100px; text-align: center; height: 32px;">&nbsp;</td>
-    <td style="width: 259px; text-align: center; height: 32px;">Quantity</td>
-    <td style="width: 135px; text-align: center; height: 32px;">Price</td>
+    htmlToSend = `
+    
+    <p>&nbsp;</p>
+<table
+  role="presentation"
+  border="0"
+  width="600px"
+  cellspacing="0"
+  cellpadding="0"
+>
+  <tbody>
+    <tr>
+      <td style="padding: 20px 0 30px 0">
+        <table
+          style="
+
+            width: 599px;
+          "
+          border="0"
+          width="600"
+          cellspacing="0"
+          cellpadding="0"
+          align="center"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="padding: 40px 0px 30px; width: 597px"
+                align="center"
+                bgcolor="#333333"
+              >
+                <img
+                  style="display: block"
+                  src="https://i.ibb.co/xhhYD8J/Logo.png"
+                  alt="Creating Email Magic."
+                  width="148"
+                  
+
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 40px 30px; width: 537px" bgcolor="#ffffff">
+                <table
+                  style="border-collapse: collapse"
+                  border="0"
+                  width="100%"
+                  cellspacing="0"
+                  cellpadding="0"
+                >
+                    <tr>
+                      
+                      <h1 style="text-align: center;"><strong>New Order Recieved</strong></h1>
+                      <p style="text-align: center;">order was placed at ${order.date}</p>
+                      <p style="text-align: center;">order number: ${order.orderId}</p>
+                      <p style="text-align: center;">username: ${order.customerName}</p>
+                      <p style="text-align: center;">email: ${order.customerEmail}</p>
+                      <h3 style="text-align: left;">Order Details:</h3>
+                      <table style="border-collapse: collapse; border: 0px #cccccc" border="1" style="bgcolor="#ffffff"height: 72px; width: 670px;">
+                        <tbody>
+                          <tr style="height: 32px;">
+                            <td style="width: 148px; text-align: center; height: 32px;">Model Title</td>
+                            <td style="width: 100px; text-align: center; height: 32px;">&nbsp;</td>
+                            <td style="width: 259px; text-align: center; height: 32px;">Quantity</td>
+                            <td style="width: 135px; text-align: center; height: 32px;">Price</td>
+                          </tr>
+                          ${orderListItemHTML}
+                          <tr style="height: 28.5px;">
+                            <td style="width: 148px; text-align: center; height: 28.5px;">&nbsp;</td>
+                            <td style="width: 100px; height: 28.5px;">&nbsp;</td>
+                            <td style="width: 259px; text-align: center; height: 28.5px;">Total Price:</td>
+                            <td style="width: 135px; text-align: center; height: 28.5px;">${order.paymentDetails.totalPrice}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </tr>
+
+
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-top: 0px; padding: 30px; width: 537px"; bgcolor="#ee4c50">
+                <table
+                  style="border-collapse: collapse;"
+                  border="0"
+                  width="100%"
+                  cellspacing="0"
+                  cellpadding="0"
+                >
+                  <tbody>
+                    <tr>
+                      <td
+                        style="
+                          color: #912226;
+                          font-family: Arial, sans-serif;
+                          font-size: 14px;
+                        "
+                      >
+                        <p style="margin: 0">
+                          &reg; ThriftyPrint 2021<br />
+                          Email questions and bug reports to
+                          <a
+                            style="color: #912226"
+                            href="mailto:feedback@thriftyprint.io"
+                            >feedback@thriftyprint.io</a
+                          >
+                        </p>
+                      </td>
+                      <td align="right">
+                        <table
+                          style="border-collapse: collapse;  "
+                          border="0"
+                          cellspacing="0"
+                          cellpadding="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td>
+                                <a href="https://thriftyprint.io/">
+                                  <img
+                                    style="display: block"
+                                    src="https://i.ibb.co/tMGw7yW/website-icon-01.png"
+                                    alt="Twitter."
+                                    width="38"
+                                    height="38"
+                                    border="0"
+                                  />
+                                </a>
+                              </td>
+                              
+
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
     </tr>
-    ${orderListItemHTML}
-    <tr style="height: 28.5px;">
-    <td style="width: 148px; text-align: center; height: 28.5px;">&nbsp;</td>
-    <td style="width: 100px; height: 28.5px;">&nbsp;</td>
-    <td style="width: 259px; text-align: center; height: 28.5px;">Total Price:</td>
-    <td style="width: 135px; text-align: center; height: 28.5px;">${order.paymentDetails.totalPrice}</td>
-    </tr>
-    </tbody>
-    </table>`;
+  </tbody>
+</table>
+
+   `;
 
     var mailOptions = {
       from: "jrmuyskens@gmail.com",
