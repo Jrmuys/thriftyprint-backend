@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/modelFiles", express.static(path.join("modelFiles")));
 app.use("/api/images", express.static(path.join("images")));
 
-// sercure app http
+// secure app http
 app.use(helmet());
 
 // allow cors
