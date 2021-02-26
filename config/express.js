@@ -24,6 +24,14 @@ app.enable("trust proxy");
 // use dist folder as hosting folder by express
 app.use(express.static(distDir));
 
+app.use(function (req, res, next) {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://thriftyprintbucket.s3; script-src 'self' https://www.paypal.com; style-src 'self' https://fonts.googleapis.com; frame-src 'self'"
+  );
+  next();
+});
+
 // parsing from api
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
