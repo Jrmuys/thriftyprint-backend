@@ -14,7 +14,7 @@ async function createActivation(user) {
     });
     console.log("Successfully saved activation details")
     console.log("Sending email...")
-    email.sendMail(user.fullname, randomString);
+    email.sendVerification(user.fullname, user.email, randomString);
 
 
 }

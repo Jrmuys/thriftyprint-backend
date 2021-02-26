@@ -19,6 +19,8 @@ AWS.config.update({
   signatureVersion: 'v4',
 });
 
+
+
 const S3 = new AWS.S3();
 
 const isAllowedMimetype = (mime) =>
@@ -36,8 +38,6 @@ const fileFilter = (
     callback(null, false);
   }
 };
-
-
 
 const getUniqFileName = (originalname) => {
   const name = uuid();
