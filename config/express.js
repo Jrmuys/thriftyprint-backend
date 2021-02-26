@@ -43,7 +43,7 @@ app.use("/api/images", express.static(path.join("images")));
 app.use(helmet());
 
 // allow cors
-app.use(cors());
+// app.use(cors());
 
 // authenticate
 app.use(passport.initialize());
