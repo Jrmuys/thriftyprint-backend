@@ -27,7 +27,7 @@ app.use(express.static(distDir));
 app.use(function (req, res, next) {
   res.setHeader(
     'Content-Security-Policy',
-    "default-src '*'; font-src 'self' https://fonts.gstatic.com; img-src 'self' http://*; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; frame-src 'self'"
+    "default-src '*'; font-src 'self' https://fonts.gstatic.com; img-src 'self' http://* data:; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; frame-src 'self'"
   );
   next();
 });
