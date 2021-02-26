@@ -24,13 +24,13 @@ app.enable("trust proxy");
 // use dist folder as hosting folder by express
 app.use(express.static(distDir));
 
-// app.use(function (req, res, next) {
-//   res.setHeader(
-//     'Content-Security-Policy',
-//     "default-src '*'; font-src 'self' https://fonts.gstatic.com; img-src 'self' http://* data:; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; frame-src 'self'"
-//   );
-//   next();
-// });
+app.use(function (req, res, next) {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src '*'; font-src 'self' https://fonts.gstatic.com; img-src 'self' http://* 'data'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; frame-src 'self'"
+  );
+  next();
+});
 
 // parsing from api
 app.use(bodyParser.json());
@@ -43,7 +43,7 @@ app.use("/api/images", express.static(path.join("images")));
 app.use(helmet());
 
 // allow cors
-app.use(cors());
+// app.use(cors());
 
 // authenticate
 app.use(passport.initialize());
