@@ -16,17 +16,25 @@ const localLogin = new LocalStrategy(
       email,
       password
     );
-    if (user.active) {
-      console.log("user is acive")
-      return user
-        ? done(null, user)
-        : done(null, false, {
-          error: "Your login details are not valid. Please try again",
-        });
-    }
-    else {
+    if (user) {
+      console.log(user)
+      if (user.active) {
+        console.log("user is acive")
+        return user
+          ? done(null, user)
+          : done(null, false, {
+            error: "Your login details are not valid. Please try again",
+          });
+      }
+      else {
+        return done(null, false, {
+          error: "Your account is not yet activated, please check your email"
+        })
+      }
+    } else {
+      console.log("User not found...")
       return done(null, false, {
-        error: "Your account is not yet activated, please check your email"
+        error: "Your login details are not valid. Please try again"
       })
     }
   }
