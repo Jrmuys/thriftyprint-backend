@@ -34,9 +34,13 @@ router.get(
 router.put("/reset-request",
   async (req, res, next) => {
     try {
-      await reset.resetRequest(req.email);
-      res.stats(201).json({ message: "reset request sent" })
+      console.log("Reset Password Request...")
+      console.log(req.body)
+      await reset.resetRequest(req.body.email);
+      console.log("Completed request")
+      res.status(201).json({ message: "reset request sent" })
     } catch (err) {
+      console.log(err)
       res.status(500).json({ message: "Error in reset request", error: err })
     }
 
@@ -46,9 +50,10 @@ router.put("/reset-request",
 router.put("/reset-token",
   async (req, res, next) => {
     try {
-      await reset.checkToken(req.token)
-      res.stats(201).json({ message: "token valid" })
+      await reset.checkToken(req.body.token)
+      res.status(201).json({ message: "token valid" })
     } catch (err) {
+      console.error(err)
       res.status(500).json({ message: "Error in validating token", error: err })
     }
   })
@@ -56,10 +61,13 @@ router.put("/reset-token",
 router.put("/reset-password",
   async (req, res, next) => {
     try {
-      await reset.resetPassword(req.token, req.password)
-      res.stats(201).json({ message: "reset password" })
+      console.log("Resetting Password...")
+      let resetObj = await reset.checkToken(req.body.token)
+      await reset.resetPassword(req.body.password, resetObj)
+      res.status(201).json({ message: "reset password" })
 
     } catch (err) {
+      console.log(err)
       res.status(500).json({ message: "Error in resetting password", error: err })
     }
   })

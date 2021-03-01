@@ -471,15 +471,23 @@ cellpadding="0"
  * @param {String} token 
  */
 function resetEmail(user, token) {
-  let link = "http://" + os.hostname() + "/auth/reset/" + token
+  let link = "http://" + "localhost:4200" + "/auth/reset/" + token
   const mailOptions = {
     from: "auth@thriftyprint.io",
     to: user.email,
-    subject: "ThriftyPrint: Password change request",
-    text: `Hi ${user.username} \n 
-                    Please click on the following link ${link} or paste it in you browser to reset your password. \n\n 
-                    If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    subject: "Password change request",
+    text: `Hi ${user.fullname}, \n 
+          Please click on the following link ${link} or paste it in you browser to reset your password. \n\n 
+          If you did not request this, please ignore this email and your password will remain unchanged.\n`,
   };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  })
+
 }
 
 /**
@@ -490,8 +498,8 @@ function passwordChangeEmail(user) {
   const mailOptions = {
     from: "auth@thriftyprint.io",
     to: user.email,
-    subject: "ThriftyPrint: Password changed",
-    text: `Hi ${user.username} \n 
+    subject: "Password changed",
+    text: `Hi ${user.fullname}, \n 
                     This is a confirmation that the password for your account ${user.email} has just been changed.\n`
   };
   transporter.sendMail(mailOptions, (error, info) => {

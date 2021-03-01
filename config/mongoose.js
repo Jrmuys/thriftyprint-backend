@@ -5,6 +5,7 @@ const config = require("../config/config");
 const mongoUri = config.mongo.uri;
 
 mongoose.connect(mongoUri, { keepAlive: 1, useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
 
 const db = mongoose.connection;
 
@@ -17,6 +18,8 @@ db.on("error", (error) => {
     `unable to connect to the database : ${mongoUri}\nError: ${error}`
   );
 });
+
+
 
 if (config.mongo.isDebug) {
   mongoose.set("debug", (collectionName, method, query, doc) => {
