@@ -26,11 +26,38 @@ router.get(
   login
 );
 
-router.post("/reset-request") {
+router.put("/reset-request",
   async (req, res, next) => {
-    reset.resetRequest(req.email)
+    try {
+      await reset.resetRequest(req.email);
+      res.stats(201).json({ message: "reset request sent" })
+    } catch (err) {
+      res.status(500).json({ message: "Error in reset request", error: err })
+    }
+
   }
-}
+)
+
+router.put("/reset-token",
+  async (req, res, next) => {
+    try {
+      await reset.checkToken(req.token)
+      res.stats(201).json({ message: "token valid" })
+    } catch (err) {
+      res.status(500).json({ message: "Error in validating token", error: err })
+    }
+  })
+
+router.put("/reset-password",
+  async (req, res, next) => {
+    try {
+      await reset.resetPassword(req.token, req.password)
+      res.stats(201).json({ message: "reset password" })
+
+    } catch (err) {
+      res.status(500).json({ message: "Error in resetting password", error: err })
+    }
+  })
 
 router.get(
   "/activate/:str",

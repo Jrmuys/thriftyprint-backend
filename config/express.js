@@ -25,24 +25,6 @@ app.enable("trust proxy");
 // use dist folder as hosting folder by express
 app.use(express.static(distDir));
 
-// app.use(function (req, res, next) {
-//   res.setHeader(
-//     'Content-Security-Policy',
-//     "default-src '*'; font-src 'self' https://fonts.gstatic.com; img-src 'self' http://* 'data'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; frame-src 'self'"
-//   );
-//   next();
-// });
-
-// app.use(function (req, res, next) {
-//   res.setHeader(
-//     'Content-Security-Policy',
-//     "default-src *  data: blob: filesystem: about: ws: wss: 'unsafe-inline' 'unsafe-eval'; script-src * data: blob: 'unsafe-inline' 'unsafe-eval';connect-src * data: blob: 'unsafe-inline';img-src * data: blob: 'unsafe-inline';frame-src * data: blob: ;style-src * data: blob: 'unsafe-inline';font-src * data: blob: 'unsafe-inline';"
-//   );
-//   next();
-// });
-
-
-
 // Allowing X-domain request
 var allowCrossDomain = function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
