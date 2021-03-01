@@ -1,3 +1,8 @@
+/**
+ * Defines the cart route
+ * @module route/cart
+ */
+
 const express = require("express");
 
 const router = express.Router();

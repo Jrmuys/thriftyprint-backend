@@ -1,9 +1,18 @@
+/**
+ * Defines activation controller to handle email verification and account activation
+ * @module controller/activation
+ */
+
 const Crypto = require('crypto')
 const Activate = require("../models/activate.model")
 const email = require("./email.controller")
 const User = require('../models/user.model')
 const SuperStr = require('@supercharge/strings')
 
+/**
+ * Creates an activation link and sends calls the email module to send a verification email
+ * @param {User} user 
+ */
 async function createActivation(user) {
     randomString = randomString()
     console.log("random string = ", randomString)
@@ -19,10 +28,19 @@ async function createActivation(user) {
 
 }
 
+/**
+ * Generates a random string of 128 random digits (not including "/" characters)
+ * @returns {String} Randomly generated string of 128 digits
+ */
 function randomString() {
     return SuperStr.random(128);
 }
 
+/**
+ * Activates an account based on the random string passed into it
+ * @param {String} rndString Random string passed through http request
+ * @returns {Number} If successful, returns "1," else throws an error
+ */
 async function activateAccount(rndString) {
     console.log("Activating account...")
     let activateFound = await Activate.findOne({ randomString: rndString }).catch((err) => {

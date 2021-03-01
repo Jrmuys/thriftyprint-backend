@@ -1,3 +1,9 @@
+/**
+ * Defines the payment route
+ * @module route/payment
+ */
+
+
 const express = require("express");
 const config = require("../config/config");
 const http = require("http");

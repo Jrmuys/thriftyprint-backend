@@ -1,3 +1,9 @@
+/**
+ * Defines the email controller which handles all email sending
+ * @module controller/email
+ * @author Joel Muyskens
+ */
+
 let nodemailer = require('nodemailer')
 let aws = require('aws-sdk')
 const config = require('../config/config')
@@ -7,82 +13,96 @@ const path = require("path")
 const User = require("../models/user.model")
 
 aws.config.update({
-    accessKeyId: config.awsAccessKeyID,
-    secretAccessKey: config.awsAccessKeySecret,
-    region: 'us-east-1',
-    signatureVersion: 'v4',
+  accessKeyId: config.awsAccessKeyID,
+  secretAccessKey: config.awsAccessKeySecret,
+  region: 'us-east-1',
+  signatureVersion: 'v4',
 });
 
-// create Nodemailer SES transporter
+/**
+ * Nodemailer SES transporter
+ * @type {Mail} 
+ */
 let transporter = nodemailer.createTransport({
-    SES: new aws.SES({
-        apiVersion: '2010-12-01'
-    })
+  SES: new aws.SES({
+    apiVersion: '2010-12-01'
+  })
 });
 
+/**
+ * readHTML reads html from a file use the fs library
+ * @param {String} path 
+ * @param {Function} callback 
+ */
 let readHTML = function (path, callback) {
-    fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
-        if (err) {
-            throw err;
-            callback(err);
-        }
-        else {
-            callback(null, html)
-        }
-    });
+  fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
+    if (err) {
+      throw err;
+      callback(err);
+    }
+    else {
+      callback(null, html)
+    }
+  });
 }
 
+/**
+ * Sends a verification email using a template
+ * @param {String} userName 
+ * @param {String} userEmail 
+ * @param {String} rndString Random string used to verify email address
+ */
 function sendVerification(userName, userEmail, rndString) {
-    // send some mail
-    const filePath = path.join(__dirname, "../email/confirmation.html")
-    readHTML(filePath, function (err, html) {
+  // send some mail
+  const filePath = path.join(__dirname, "../email/confirmation.html")
+  readHTML(filePath, function (err, html) {
 
-        let template = handlebars.compile(html);
-        let replacements = {
-            user: userName,
-            activateURL: "https://thriftyprint.io/auth/activate/" + rndString
-        }
-        let sendHtml = template(replacements)
-
-
-        transporter.sendMail({
-            from: 'verify@thriftyprint.io',
-            to: userEmail,
-            subject: 'Message',
-            text: `Thanks for signing up to ThriftyPrint!\n please follow this link to verify your email address\n https://thriftyprint.io/api/activate/${rndString}`,
-            html: sendHtml,
-            ses: { // optional extra arguments for SendRawEmail
-                Tags: [{
-                    Name: 'type',
-                    Value: 'verification'
-                }]
-            }
-        }, (err, info) => {
-            console.log(err)
-            // console.log(info.envelope);
-            // console.log(info.messageId);
-        });
+    let template = handlebars.compile(html);
+    let replacements = {
+      user: userName,
+      activateURL: "https://thriftyprint.io/auth/activate/" + rndString
+    }
+    let sendHtml = template(replacements)
 
 
-    })
+    transporter.sendMail({
+      from: 'verify@thriftyprint.io',
+      to: userEmail,
+      subject: 'Message',
+      text: `Thanks for signing up to ThriftyPrint!\n please follow this link to verify your email address\n https://thriftyprint.io/api/activate/${rndString}`,
+      html: sendHtml,
+      ses: { // optional extra arguments for SendRawEmail
+        Tags: [{
+          Name: 'type',
+          Value: 'verification'
+        }]
+      }
+    }, (err, info) => {
+      console.log(err)
 
-
+    });
+  })
 }
 
+/**
+ * Sends a confirmation email to the user's email with all of the order details
+ * @param {Order} order 
+ * @param {CartItem[]} orderArray 
+ */
 function orderEmail(order, orderArray) {
 
-    console.log("now this...");
-    orderListItemHTML = "";
-    orderArray.forEach((cartItem) => {
-        orderListItemHTML += `<tr style="height: 53px;">
+  console.log("now this...");
+  orderListItemHTML = "";
+  orderArray.forEach((cartItem) => {
+    orderListItemHTML += `<tr style="height: 53px;">
   <td style="width: 148px; padding:4px; text-align: center; height: 53px;">${cartItem.model.title}</td>
   <td style="width: 100px; height: 53px;">&nbsp;<img><img src="${cartItem.imgUrl}" alt="thumbnail" width="192" height="108" /></td>
   <td style="width: 259px; text-align: center; height: 53px;">${cartItem.model.quantity}</td>
   <td style="width: 135px; text-align: center; height: 53px;">${cartItem.price}</td>
   </tr>`;
-    });
-    console.log(orderListItemHTML);
-    htmlToSend = `
+  });
+  console.log(orderListItemHTML);
+  htmlToSend = `
   
   <p>&nbsp;</p>
 <table
@@ -233,38 +253,43 @@ cellpadding="0"
 
  `;
 
-    var mailOptions = {
-        from: "order@thriftyprint.io",
-        to: order.customerEmail,
-        subject: `ThriftyPrint Order: ${order.orderId} Confirmation`,
-        html: htmlToSend,
-    };
-    console.log("sending email...");
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log("Email sent: " + info.response);
-        }
-        console.log("this???");
-    });
-    console.log("done sending email :)");
+  var mailOptions = {
+    from: "order@thriftyprint.io",
+    to: order.customerEmail,
+    subject: `ThriftyPrint Order: ${order.orderId} Confirmation`,
+    html: htmlToSend,
+  };
+  console.log("sending email...");
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+    console.log("this???");
+  });
+  console.log("done sending email :)");
 }
 
+/**
+ * Sends a notification email to the admins when an order is made, includes link to admin order page
+ * @param {Order} order 
+ * @param {CartItem[]} orderArray 
+ */
 function adminOrderEmail(order, orderArray) {
 
-    console.log("now this...");
-    orderListItemHTML = "";
-    orderArray.forEach((cartItem) => {
-        orderListItemHTML += `<tr style="height: 53px;">
+  console.log("now this...");
+  orderListItemHTML = "";
+  orderArray.forEach((cartItem) => {
+    orderListItemHTML += `<tr style="height: 53px;">
   <td style="width: 148px; padding:4px; text-align: center; height: 53px;">${cartItem.model.title}</td>
   <td style="width: 100px; height: 53px;">&nbsp;<img><img src="${cartItem.imgUrl}" alt="thumbnail" width="192" height="108" /></td>
   <td style="width: 259px; text-align: center; height: 53px;">${cartItem.model.quantity}</td>
   <td style="width: 135px; text-align: center; height: 53px;">${cartItem.price}</td>
   </tr>`;
-    });
-    console.log(orderListItemHTML);
-    htmlToSend = `
+  });
+  console.log(orderListItemHTML);
+  htmlToSend = `
   
   <p>&nbsp;</p>
 <table
@@ -417,25 +442,25 @@ cellpadding="0"
 
  `;
 
-    admins = ['order@thriftyprint.io']
-    admins.foreach((email) => {
-        var mailOptions = {
-            from: "order@thriftyprint.io",
-            to: email,
-            subject: `[Admin] ThriftyPrint Order: ${order.orderId} Confirmation`,
-            html: htmlToSend,
-        };
-        console.log("sending email...");
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Email sent: " + info.response);
-            }
-            console.log("this???");
-        });
-        console.log("done sending email :)");
-    })
+  admins = ['order@thriftyprint.io']
+  admins.foreach((email) => {
+    var mailOptions = {
+      from: "order@thriftyprint.io",
+      to: email,
+      subject: `[Admin] ThriftyPrint Order: ${order.orderId} Confirmation`,
+      html: htmlToSend,
+    };
+    console.log("sending email...");
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+      console.log("this???");
+    });
+    console.log("done sending email :)");
+  })
 
 }
 

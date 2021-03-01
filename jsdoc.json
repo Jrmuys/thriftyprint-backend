@@ -1,0 +1,24 @@
+{
+  "source": {
+    "include": [
+      "middleware",
+      "config",
+      "controller",
+      "models",
+      "routes",
+      "index.js",
+      "types.js"
+    ],
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules/|docs)"
+  },
+  "plugins": ["plugins/markdown"],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true
+  },
+  "opts": {
+    "recursive": true,
+    "destination": "./docs"
+  }
+}

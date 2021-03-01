@@ -1,3 +1,8 @@
+/**
+ * Defines the admin route
+ * @module route/admin
+ */
+
 const express = require("express");
 const config = require("../config/config");
 const router = express.Router();

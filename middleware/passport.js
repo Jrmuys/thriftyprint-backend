@@ -1,3 +1,8 @@
+/**
+ * Defines the passport middleware for local and jwt logins
+ * @module middleware/passport
+ */
+
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const JwtStrategy = require("passport-jwt").Strategy;
@@ -19,7 +24,10 @@ const mongo = require('../config/mongoose')
 // })
 
 
-
+/**
+ * Defines the local login strategy
+ * @type {LocalStrategy}
+ */
 const localLogin = new LocalStrategy(
   {
     usernameField: "email",
@@ -54,6 +62,11 @@ const localLogin = new LocalStrategy(
   }
 );
 
+
+/**
+ * Defines the jwt login strategy
+ * @type {JwtStrategy}
+ */
 const jwtLogin = new JwtStrategy(
   {
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),

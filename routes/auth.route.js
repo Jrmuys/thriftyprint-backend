@@ -1,3 +1,7 @@
+/**
+ * Defines the authentication route
+ * @module route/auth
+ */
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 
@@ -14,14 +18,15 @@ const reset = require("../controller/reset.controller")
 const router = express.Router();
 
 router.post("/register", asyncHandler(insert), login);
+
 router.post(
   "/login",
   passport.authenticate("local", { session: false }),
   login
 );
+
 router.get(
   "/findme",
-  test,
   passport.authenticate("jwt", { session: false }),
   login
 );
@@ -77,6 +82,13 @@ router.get(
   }
 )
 
+/**
+ * Inserts user into database and creates activation and cart for the user
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {any} next 
+ * @returns {void}
+ */
 async function insert(req, res, next) {
   const savedUser = req.body;
 
@@ -99,12 +111,11 @@ async function insert(req, res, next) {
     });
 }
 
-function test(req, res, next) {
-  next();
-}
-
-
-
+/**
+ * Generates the token and gives login successful response with user object, token, and expiration
+ * @param {Request} req 
+ * @param {Response} res 
+ */
 function login(req, res) {
   const expiresIn = config.expiresIn;
   const user = req.user;

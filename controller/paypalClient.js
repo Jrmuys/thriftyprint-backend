@@ -1,3 +1,10 @@
+/**
+ * Sets up paypal client for use in  payment controller {@link module:controller/payment}
+ * 
+ * @module controller/paypalClient
+ */
+
+
 "use strict";
 
 const config = require("../config/config");

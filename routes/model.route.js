@@ -1,3 +1,8 @@
+/**
+ * Defines the model route
+ * @module route/model
+ */
+
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 const multer = require("multer");

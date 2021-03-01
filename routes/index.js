@@ -1,5 +1,9 @@
-const express = require("express");
+/**
+ * Defines the index route
+ * @module route/index
+ */
 
+const express = require("express");
 const authRoutes = require("./auth.route");
 const modelRoutes = require("./model.route");
 const cartRoutes = require("./cart.route");
