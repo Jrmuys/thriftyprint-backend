@@ -1,3 +1,8 @@
+/**
+ * @author Joel Muyskens
+ * @module controller/cart
+ */
+
 const mongoose = require("mongoose");
 const express = require("express");
 
