@@ -8,6 +8,7 @@ let nodemailer = require('nodemailer')
 let aws = require('aws-sdk')
 const config = require('../config/config')
 const fs = require("fs")
+const os = require("os")
 const handlebars = require("handlebars")
 const path = require("path")
 const User = require("../models/user.model")
@@ -66,7 +67,7 @@ function sendVerification(userName, userEmail, rndString) {
 
 
     transporter.sendMail({
-      from: 'verify@thriftyprint.io',
+      from: 'auth@thriftyprint.io',
       to: userEmail,
       subject: 'Message',
       text: `Thanks for signing up to ThriftyPrint!\n please follow this link to verify your email address\n https://thriftyprint.io/api/activate/${rndString}`,
@@ -464,4 +465,43 @@ cellpadding="0"
 
 }
 
-module.exports = { sendVerification, orderEmail, adminOrderEmail }
+/**
+ * Sends an email to the user with a link to reset their password
+ * @param {User} user 
+ * @param {String} token 
+ */
+function resetEmail(user, token) {
+  let link = "http://" + os.hostname() + "/auth/reset/" + token
+  const mailOptions = {
+    from: "auth@thriftyprint.io",
+    to: user.email,
+    subject: "ThriftyPrint: Password change request",
+    text: `Hi ${user.username} \n 
+                    Please click on the following link ${link} or paste it in you browser to reset your password. \n\n 
+                    If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+  };
+}
+
+/**
+ * Sends a password confirming that their password was reset
+ * @param {User} user 
+ */
+function passwordChangeEmail(user) {
+  const mailOptions = {
+    from: "auth@thriftyprint.io",
+    to: user.email,
+    subject: "ThriftyPrint: Password changed",
+    text: `Hi ${user.username} \n 
+                    This is a confirmation that the password for your account ${user.email} has just been changed.\n`
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  })
+}
+
+
+module.exports = { sendVerification, orderEmail, adminOrderEmail, resetEmail, passwordChangeEmail }

@@ -41,6 +41,7 @@
     "nodemailer-ses-transport": "^1.5.1",
     "nodemon": "^2.0.7",
     "npm": "^6.14.8",
+    "os": "^0.1.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
