@@ -8,6 +8,7 @@ const cartController = require("../controller/cart.controller.js");
 const activationController = require("../controller/activation.controller");
 const passport = require("../middleware/passport");
 const activate = require("../controller/activation.controller")
+const reset = require("../controller/reset.controller")
 
 
 const router = express.Router();
@@ -24,6 +25,12 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   login
 );
+
+router.post("/reset-request") {
+  async (req, res, next) => {
+    reset.resetRequest(req.email)
+  }
+}
 
 router.get(
   "/activate/:str",

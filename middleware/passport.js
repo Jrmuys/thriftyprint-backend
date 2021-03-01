@@ -2,9 +2,23 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
-
 const config = require("../config/config");
 const userController = require("../controller/user.controller");
+
+const { RateLimiterMongo } = require('rate-limiter-flexible')
+const maxWrongAttemptsByIpPerDay = 100;
+const maxConsecutiveFailByUsernameAndIP = 10;
+const mongo = require('../config/mongoose')
+
+// const limiterSlowBruteByIP = new RateLimiterMongo({
+//   storeClient: mongo.db,
+//   keyPrefix: 'login_fail_attempts',
+//   points: maxWrongAttemptsByIpPerDay,
+//   duration: 60 * 60 * 3,
+//   blockDuration: 60 * 15
+// })
+
+
 
 const localLogin = new LocalStrategy(
   {

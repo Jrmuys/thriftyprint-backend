@@ -7,6 +7,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const routes = require("../routes");
 const passport = require("../middleware/passport");
+const csp = require("helmet-csp");
 
 // get app
 const app = express();
@@ -24,13 +25,39 @@ app.enable("trust proxy");
 // use dist folder as hosting folder by express
 app.use(express.static(distDir));
 
-app.use(function (req, res, next) {
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src '*'; font-src 'self' https://fonts.gstatic.com; img-src 'self' http://* 'data'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; frame-src 'self'"
-  );
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.setHeader(
+//     'Content-Security-Policy',
+//     "default-src '*'; font-src 'self' https://fonts.gstatic.com; img-src 'self' http://* 'data'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; frame-src 'self'"
+//   );
+//   next();
+// });
+
+// app.use(function (req, res, next) {
+//   res.setHeader(
+//     'Content-Security-Policy',
+//     "default-src *  data: blob: filesystem: about: ws: wss: 'unsafe-inline' 'unsafe-eval'; script-src * data: blob: 'unsafe-inline' 'unsafe-eval';connect-src * data: blob: 'unsafe-inline';img-src * data: blob: 'unsafe-inline';frame-src * data: blob: ;style-src * data: blob: 'unsafe-inline';font-src * data: blob: 'unsafe-inline';"
+//   );
+//   next();
+// });
+
+
+
+// Allowing X-domain request
+var allowCrossDomain = function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Cache-Control");
+
+  // intercept OPTIONS method
+  if ('OPTIONS' == req.method) {
+    res.send(200);
+  }
+  else {
+    next();
+  }
+};
+app.use(allowCrossDomain);
 
 // parsing from api
 app.use(bodyParser.json());
@@ -42,8 +69,28 @@ app.use("/api/images", express.static(path.join("images")));
 // secure app http
 app.use(helmet());
 
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: [`'self'`],
+    imgSrc: [`'self'`, `data:`, `https:`, `thriftyprintbucket.s3.us-east-2.com`],
+    scriptSrc: [`'self'`, `https://www.paypal.com`,],
+    scriptSrcElem: [`'self'`, `https://paypal.com`, `https://www.paypal.com`],
+    baseUri: [`'self'`],
+    fontSrc: [`'self'`, `https:`, `data:`],
+    frameSrc: [`'self'`, 'https://www.sandbox.paypal.com/'],
+    connectSrc: [`self`, `https://www.sandbox.paypal.com`, `http://localhost:8080/`],
+    frameAncestors: [`'self'`],
+    objectSrc: [`'none'`],
+    scriptSrcAttr: [`'none'`],
+    styleSrc: [`'self'`, `https:`, `'unsafe-inline'`],
+
+
+  },
+  reportOnly: false
+}))
+
 // allow cors
-// app.use(cors());
+app.use(cors());
 
 // authenticate
 app.use(passport.initialize());
