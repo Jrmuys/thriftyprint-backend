@@ -85,7 +85,7 @@ router.post(
       contentType: multerS3.AUTO_CONTENT_TYPE,
       key: function (req, file, cb) {
         const fileName = getUniqFileName(file.originalname);
-        const s3_inner_directory = 'model_files';
+        const s3_inner_directory = 'model_images';
         const finalPath = `${s3_inner_directory}/${fileName}`;
 
         file.newName = fileName;
