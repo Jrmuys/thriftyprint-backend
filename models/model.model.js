@@ -7,6 +7,7 @@ const modelSchema = mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
   comment: { type: String },
   quantity: { type: String, required: true },
+  createdOn: { type: Date, default: Date.now() }
 });
 
 module.exports = mongoose.model("Model", modelSchema);
