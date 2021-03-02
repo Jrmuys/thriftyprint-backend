@@ -2,14 +2,10 @@
   "name": "printing-site",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
     "server:watch": "nodemon backend",
     "server:start": "node backend/app.js",
     "bcrypt": "npm install bcrypt",
     "start": "node index.js",
-    "build": "ng build",
-    "build:prod": "npm run build -- --prod",
-    "e2e": "ng e2e",
     "doc": "jsdoc -c jsdoc.json"
   },
   "private": true,
