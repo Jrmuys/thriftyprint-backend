@@ -61,7 +61,7 @@ function sendVerification(userName, userEmail, rndString) {
     let template = handlebars.compile(html);
     let replacements = {
       user: userName,
-      activateURL: "https://thriftyprint.io/auth/activate/" + rndString
+      activateURL: "https://thriftyprint.io/auth/verify/" + rndString
     }
     let sendHtml = template(replacements)
 
@@ -471,7 +471,7 @@ cellpadding="0"
  * @param {String} token 
  */
 function resetEmail(user, token) {
-  let link = "http://" + "localhost:4200" + "/auth/reset/" + token
+  let link = "https://" + "thriftyprint.io" + "/auth/reset/" + token
   const mailOptions = {
     from: "auth@thriftyprint.io",
     to: user.email,
