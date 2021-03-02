@@ -13,11 +13,14 @@ const activationController = require("../controller/activation.controller");
 const passport = require("../middleware/passport");
 const activate = require("../controller/activation.controller")
 const reset = require("../controller/reset.controller")
+const email = require("../controller/email.controller")
 
 
 const router = express.Router();
 
-router.post("/register", asyncHandler(insert), login);
+router.post("/register", asyncHandler(insert), (req, res, next) => {
+  res.status(201).json("registration complete")
+});
 
 router.post(
   "/login",
@@ -86,6 +89,20 @@ router.get(
         text: "Internal server error",
         error: err
       })
+    }
+  }
+)
+
+router.put(
+  "/resendActivation", async (req, res, next) => {
+    try {
+      await activationController.resendActivation(req.body.email);
+      console.log("Resend success")
+      res.status(201).json({ message: "Verification email resend success" })
+    } catch (err) {
+      console.error(err)
+      res.status(501).json({ message: "Internal server error", error: err })
+
     }
   }
 )
