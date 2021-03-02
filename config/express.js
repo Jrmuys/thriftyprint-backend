@@ -26,19 +26,19 @@ app.enable("trust proxy");
 app.use(express.static(distDir));
 
 // Allowing X-domain request
-var allowCrossDomain = function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Cache-Control");
+// var allowCrossDomain = function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Cache-Control");
 
-  // intercept OPTIONS method
-  if ('OPTIONS' == req.method) {
-    res.send(200);
-  }
-  else {
-    next();
-  }
-};
+//   // intercept OPTIONS method
+//   if ('OPTIONS' == req.method) {
+//     res.send(200);
+//   }
+//   else {
+//     next();
+//   }
+// };
 app.use(allowCrossDomain);
 
 // parsing from api
@@ -60,7 +60,7 @@ app.use(helmet.contentSecurityPolicy({
     baseUri: [`'self'`],
     fontSrc: [`'self'`, `https:`, `data:`],
     frameSrc: [`'self'`, 'https://www.sandbox.paypal.com/'],
-    connectSrc: [`self`, `https://www.sandbox.paypal.com`, `http://localhost:8080/`],
+    connectSrc: [`self`, `https://www.sandbox.paypal.com`, `http://localhost:8080/`, `https://thriftyprint.io`],
     frameAncestors: [`'self'`],
     objectSrc: [`'none'`],
     scriptSrcAttr: [`'none'`],
