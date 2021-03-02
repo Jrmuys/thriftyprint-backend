@@ -75,10 +75,7 @@ async function activateAccount(rndString) {
 async function resendActivation(emailAddress) {
     user = await User.findOne({ email: emailAddress })
     if (user) {
-        activate = await Activate.findOne({ userID: user._id })
-        if (activate) {
-            email.sendVerification(user.fullname, emailAddress, activate.randomString)
-        }
+        await createActivation(user);
     } else {
         throw new Error("Could not find user")
     }
