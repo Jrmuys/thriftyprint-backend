@@ -7,10 +7,34 @@ const cors = require("cors");
 const helmet = require("helmet");
 const routes = require("../routes");
 const passport = require("../middleware/passport");
-const csp = require("helmet-csp");
+const cleanup = require("./db-cleanup");
 
 // get app
 const app = express();
+
+// secure app http
+app.use(helmet());
+
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: [`'self'`],
+    imgSrc: [`'self'`, `data:`, `https:`, `thriftyprintbucket.s3.us-east-2.com`],
+    scriptSrc: [`'self'`, `https://www.paypal.com`,],
+    scriptSrcElem: [`'self'`, `https://paypal.com`, `https://www.paypal.com`],
+    baseUri: [`'self'`],
+    fontSrc: [`'self'`, `https:`, `data:`],
+    frameSrc: [`'self'`, 'https://www.sandbox.paypal.com/'],
+    connectSrc: [`'self'`, `https://www.sandbox.paypal.com`, `http://localhost:8080/`, `https://thriftyprint.io`],
+    frameAncestors: [`'self'`],
+    objectSrc: [`'none'`],
+    scriptSrcAttr: [`'none'`],
+    styleSrc: [`'self'`, `https:`, `'unsafe-inline'`],
+  },
+  reportOnly: false
+}))
+
+// allow cors
+app.use(cors());
 
 // logger
 if (config.env === "development") {
@@ -23,7 +47,7 @@ const distDir = path.join(__dirname, "../dist/printing-site");
 app.enable("trust proxy");
 
 // use dist folder as hosting folder by express
-app.use(express.static(distDir));
+
 
 // Allowing X-domain request
 // var allowCrossDomain = function (req, res, next) {
@@ -39,7 +63,7 @@ app.use(express.static(distDir));
 //     next();
 //   }
 // };
-app.use(allowCrossDomain);
+// app.use(allowCrossDomain);
 
 // parsing from api
 app.use(bodyParser.json());
@@ -48,31 +72,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/modelFiles", express.static(path.join("modelFiles")));
 app.use("/api/images", express.static(path.join("images")));
 
-// secure app http
-app.use(helmet());
 
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: [`'self'`],
-    imgSrc: [`'self'`, `data:`, `https:`, `thriftyprintbucket.s3.us-east-2.com`],
-    scriptSrc: [`'self'`, `https://www.paypal.com`,],
-    scriptSrcElem: [`'self'`, `https://paypal.com`, `https://www.paypal.com`],
-    baseUri: [`'self'`],
-    fontSrc: [`'self'`, `https:`, `data:`],
-    frameSrc: [`'self'`, 'https://www.sandbox.paypal.com/'],
-    connectSrc: [`self`, `https://www.sandbox.paypal.com`, `http://localhost:8080/`, `https://thriftyprint.io`],
-    frameAncestors: [`'self'`],
-    objectSrc: [`'none'`],
-    scriptSrcAttr: [`'none'`],
-    styleSrc: [`'self'`, `https:`, `'unsafe-inline'`],
+app.use(express.static(distDir));
 
 
-  },
-  reportOnly: false
-}))
-
-// allow cors
-app.use(cors());
 
 // authenticate
 app.use(passport.initialize());
