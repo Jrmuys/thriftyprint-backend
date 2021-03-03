@@ -24,7 +24,7 @@ app.use(helmet.contentSecurityPolicy({
     baseUri: [`'self'`],
     fontSrc: [`'self'`, `https:`, `data:`],
     frameSrc: [`'self'`, 'https://www.sandbox.paypal.com/'],
-    connectSrc: [`'self'`, `https://thriftyprintbucket`, `https://www.sandbox.paypal.com`, `http://localhost:8080/`, `https://thriftyprint.io`],
+    connectSrc: [`'self'`, `https://thriftyprintbucket.s3.us-east-2.amazonaws.com`, `https://www.sandbox.paypal.com`, `http://localhost:8080/`, `https://thriftyprint.io`],
     frameAncestors: [`'self'`],
     objectSrc: [`'none'`],
     scriptSrcAttr: [`'none'`],
