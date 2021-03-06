@@ -279,7 +279,7 @@ cellpadding="0"
  */
 function adminOrderEmail(order, orderArray) {
 
-  console.log("now this...");
+  console.log("Sending admins email");
   orderListItemHTML = "";
   orderArray.forEach((cartItem) => {
     orderListItemHTML += `<tr style="height: 53px;">

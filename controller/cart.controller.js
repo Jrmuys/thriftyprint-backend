@@ -25,11 +25,12 @@ function createCart(_id) {
 function addToCart(req, res, next, host) {
   console.log("adding to cart...");
   const url = req.protocol + "://" + host;
+  console.log("Got price: " + req.body.price + "\nAdding this price to cart:", parseFloat(req.body.price))
   const cartItem = new CartItem(
     JSON.parse(req.body.model),
-    parseFloat(req.body.price),
+    String(req.body.price),
     req.file.location,
-    parseFloat(req.body.itemTotal),
+    String(req.body.itemTotal),
     req.body.printStatus,
     req.body.boundingVolume
   );
@@ -43,14 +44,15 @@ function addToCart(req, res, next, host) {
   )
     .then((newCart) => {
       // cart;
-      console.log(newCart);
+
+      // console.log(JSON.stringify(newCart));
       newCart.totalPrice
         ? (newCart.totalPrice =
           parseFloat(newCart.totalPrice) + parseFloat(cartItem.itemTotal))
         : (newCart.totalPrice = cartItem.itemTotal);
       let cart = newCart.save().then((savedCart) => {
         savedCart
-          ? res.status(201).json({ message: "added successfully" })
+          ? res.status(201).json({ message: "added successfully", cart: savedCart.cartItems })
           : res.status(404).json({ message: "Cart not found" });
       });
     })
