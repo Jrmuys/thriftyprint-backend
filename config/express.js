@@ -19,7 +19,7 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: [`'self'`],
     imgSrc: [`'self'`, `data:`, `https:`, `thriftyprintbucket.s3.us-east-2.com`],
-    scriptSrc: [`'self'`, `https://www.paypal.com`,],
+    scriptSrc: [`'self'`, `https://www.paypal.com`, `unsafe-inline`],
     scriptSrcElem: [`'self'`, `https://paypal.com`, `https://www.paypal.com`],
     baseUri: [`'self'`],
     fontSrc: [`'self'`, `https:`, `data:`],
