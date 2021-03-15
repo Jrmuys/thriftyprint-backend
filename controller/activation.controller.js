@@ -14,7 +14,7 @@ const SuperStr = require('@supercharge/strings')
  * @param {User} user 
  */
 async function createActivation(user) {
-    randomString = randomString()
+    randomString = SuperStr.random(128);
     console.log("random string = ", randomString)
     newActivate = { randomString: randomString, userID: user._id }
     await new Activate(newActivate).save().catch((error) => {
