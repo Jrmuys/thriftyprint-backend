@@ -85,7 +85,7 @@ function updateCart(req, res, next) {
   let newTotalPrice = 0;
   cartItems = req.body;
   cartItems.map((cartItem) => {
-    newTotalPrice += +cartItem.price * +cartItem.model.quantity;
+    newTotalPrice += parseFloat(cartItem.price) * parseFloat(cartItem.model.quantity);
   });
   updatedCart = new Cart({
     cartItems: cartItems,
